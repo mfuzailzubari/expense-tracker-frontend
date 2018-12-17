@@ -50,7 +50,6 @@ export default {
       categories: []
     };
   },
-
   created() {
     console.log(this.$baseUrl);
     this.fetchCategories(this.$baseUrl);

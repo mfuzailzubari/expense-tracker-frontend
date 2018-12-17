@@ -18,6 +18,7 @@
                   <th class="numeric">Note</th>
                   <th class="numeric">Date</th>
                   <th class="numeric">Amount</th>
+                  <th class="numeric">Category</th>
                   <th class="numeric">Action</th>
                 </tr>
               </thead>
@@ -26,6 +27,7 @@
                   <td>{{ expense.note }}</td>
                   <td>{{ expense.date }}</td>
                   <td class="numeric">{{ expense.amount }}</td>
+                  <td>{{ expense.category.name }}</td>
                   <td>
                     <button @click="edit(expense)">edit</button>
                   </td>
