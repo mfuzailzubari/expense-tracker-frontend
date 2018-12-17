@@ -8,22 +8,47 @@
     <section id="main-content">
       <section class="wrapper site-min-height">
         <h3>
-          <i class="fa fa-angle-right"></i> View Categories
+          <i class="fa fa-angle-right"></i> Category
         </h3>
         <div class="row mt">
           <div class="col-lg-12">
-            <table class="table table-bordered table-striped table-condensed">
-              <thead>
-                <tr>
-                  <th class="numeric">Name</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="category in categories" :key="category.id">
-                  <td>{{ category.name }}</td>
-</tr>
-              </tbody>
-            </table>
+            <div class="white-panel pn">
+              <div class="panel-heading">
+                <div class="pull-left">
+                  <h5>
+                    <i class="fa fa-tasks"></i> Add Category
+                  </h5>
+                </div>
+                <br>
+              </div>
+              <div class="custom-check goleft mt">
+                <div class="row">
+                  <div class="col-md-2"></div>
+                  <div class="col-md-4">
+                    <form class>
+                      <div class="login-wrap">
+                        <input
+                          type="text"
+                          class="form-control"
+                          v-model="name"
+                          required
+                          placeholder="Name"
+                          autofocus
+                        >
+                        <br>
+
+                        <button class="btn btn-theme btn-block" type="submit" @click="handleSubmit">
+                          <i class="fa fa-lock"></i> Add Category
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="col-md-6"></div>
+                </div>
+              </div>
+              <!-- /table-responsive -->
+            </div>
+            <!--/ White-panel -->
           </div>
         </div>
       </section>
@@ -43,104 +68,39 @@ export default {
   name: "ViewCategory",
   data() {
     return {
-      categories: [],
+      name: ""
     };
   },
 
-  created() {
-    console.log(this.$baseUrl);
-    this.fetchExpenses(this.$baseUrl);
-  },
   methods: {
-    fetchExpenses(page_url) {
-      let vm = this;
-      page_url = page_url + "categories";
-      // this.$http.headers.common["Accept"] = "application/json";
-      this.$http
-        .get(page_url, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("jwt"),
-            Accept: "application/json"
-          }
-        })
-        // .then(res => res.json())
-        .then(result => {
-          this.categories = result.body;
-          // vm.makePagination(res.meta, res.links);
-        })
-        .catch(err => console.log(err));
+    handleSubmit(e) {
+      e.preventDefault();
+      if (this.name.length > 0) {
+        // console.log("click");
+        this.$http.headers.common["Accept"] = "application/json";
+        this.$http
+          .post(
+            this.$baseUrl + "categories",
+            {
+              name: this.name
+            },
+            {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("jwt"),
+                Accept: "application/json"
+              }
+            }
+          )
+          .then(response => {
+            console.log(response.body);
+            this.$router.push("categories");
+          })
+          .catch(function(error) {
+            console.error(error);
+            this.errormsg = error;
+          });
+      }
     }
-    // makePagination(meta, links) {
-    //   let pagination = {
-    //     current_page: meta.current_page,
-    //     last_page: meta.last_page,
-    //     next_page_url: links.next,
-    //     prev_page_url: links.prev
-    //   };
-    //   this.pagination = pagination;
-    // },
-    // deleteArticle(id) {
-    //   if (confirm('Are You Sure?')) {
-    //     fetch(`api/article/${id}`, {
-    //       method: 'delete'
-    //     })
-    //       .then(res => res.json())
-    //       .then(data => {
-    //         alert('Article Removed');
-    //         this.fetchExpenses();
-    //       })
-    //       .catch(err => console.log(err));
-    //   }
-    // },
-    // addArticle() {
-    //   if (this.edit === false) {
-    //     // Add
-    //     fetch('api/article', {
-    //       method: 'post',
-    //       body: JSON.stringify(this.article),
-    //       headers: {
-    //         'content-type': 'application/json'
-    //       }
-    //     })
-    //       .then(res => res.json())
-    //       .then(data => {
-    //         this.clearForm();
-    //         alert('Article Added');
-    //         this.fetchExpenses();
-    //       })
-    //       .catch(err => console.log(err));
-    //   } else {
-    //     // Update
-    //     fetch('api/article', {
-    //       method: 'put',
-    //       body: JSON.stringify(this.article),
-    //       headers: {
-    //         'content-type': 'application/json'
-    //       }
-    //     })
-    //       .then(res => res.json())
-    //       .then(data => {
-    //         this.clearForm();
-    //         alert('Article Updated');
-    //         this.fetchExpenses();
-    //       })
-    //       .catch(err => console.log(err));
-    //   }
-    // },
-    // editArticle(article) {
-    //   this.edit = true;
-    //   this.article.id = article.id;
-    //   this.article.article_id = article.id;
-    //   this.article.title = article.title;
-    //   this.article.body = article.body;
-    // },
-    // clearForm() {
-    //   this.edit = false;
-    //   this.article.id = null;
-    //   this.article.article_id = null;
-    //   this.article.title = '';
-    //   this.article.body = '';
-    // }
   },
   components: {
     TopBar,
@@ -152,19 +112,4 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1,
-h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
 </style>

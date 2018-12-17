@@ -16,12 +16,16 @@
               <thead>
                 <tr>
                   <th class="numeric">Name</th>
+                  <th class="numeric">Action</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="category in categories" :key="category.id">
                   <td>{{ category.name }}</td>
-</tr>
+                  <td>
+                    <button @click="edit(category)">edit</button>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -40,22 +44,29 @@ import SideBar from "./SideBar";
 import Bottom from "./Bottom";
 
 export default {
-  name: "ViewExpense",
+  name: "ViewCategory",
   data() {
     return {
-      categories: [],
+      categories: []
     };
   },
 
   created() {
     console.log(this.$baseUrl);
-    this.fetchExpenses(this.$baseUrl);
+    this.fetchCategories(this.$baseUrl);
   },
   methods: {
-    fetchExpenses(page_url) {
+    edit(category) {
+      // open the modal using the refs
+      this.$router.push({
+        name: "EditCategory",
+        params: { data: category }
+      });
+    },
+
+    fetchCategories(page_url) {
       let vm = this;
       page_url = page_url + "categories";
-      // this.$http.headers.common["Accept"] = "application/json";
       this.$http
         .get(page_url, {
           headers: {

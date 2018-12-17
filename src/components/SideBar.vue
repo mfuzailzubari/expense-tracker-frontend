@@ -32,7 +32,7 @@
               <router-link to="/expenses">Expense List</router-link>
             </li>
             <li>
-              <router-link to="/expenses">Create Expense</router-link>
+              <router-link to="/add-expense">Create Expense</router-link>
             </li>
           </ul>
         </li>
@@ -47,7 +47,7 @@
               <router-link to="/categories">Category List</router-link>
             </li>
             <li>
-              <router-link to="/expenses">Create Category</router-link>
+              <router-link to="/add-category">Create Category</router-link>
             </li>
           </ul>
         </li>
