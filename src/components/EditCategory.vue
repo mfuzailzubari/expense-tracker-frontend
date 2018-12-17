@@ -8,15 +8,15 @@
     <section id="main-content">
       <section class="wrapper site-min-height">
         <h3>
-          <i class="fa fa-angle-right"></i> Expense
+          <i class="fa fa-angle-right"></i> Category
         </h3>
         <div class="row mt">
           <div class="col-lg-12">
-            <div class="white-panel">
+            <div class="white-panel pn">
               <div class="panel-heading">
                 <div class="pull-left">
                   <h5>
-                    <i class="fa fa-tasks"></i> Add Expense
+                    <i class="fa fa-tasks"></i> Edit Category
                   </h5>
                 </div>
                 <br>
@@ -30,42 +30,15 @@
                         <input
                           type="text"
                           class="form-control"
-                          v-model="note"
+                          v-model="name"
                           required
-                          placeholder="Note"
+                          placeholder="Name"
                           autofocus
                         >
-                        <br>
-                        <input
-                          type="amount"
-                          class="form-control"
-                          v-model="amount"
-                          required
-                          placeholder="Amount"
-                          autofocus
-                        >
-                        <br>
-                        <input
-                          type="date"
-                          class="form-control"
-                          v-model="date"
-                          required
-                          placeholder="Date"
-                          autofocus
-                        >
-                        <br>
-                        <select v-model="category_id" required class="form-control">
-                          <!-- <option v-bind:value="category.id" selected>{{ category.name }}</option> -->
-                          <option
-                            v-for="category in categories"
-                            :value="category.id"
-                            :key="category.name"
-                          >{{ category.name }}</option>
-                        </select>
                         <br>
 
                         <button class="btn btn-theme btn-block" type="submit" @click="handleSubmit">
-                          <i class="fa fa-lock"></i> Add Expense
+                          <i class="fa fa-lock"></i> Edit Category
                         </button>
                       </div>
                     </form>
@@ -92,50 +65,30 @@ import SideBar from "./SideBar";
 import Bottom from "./Bottom";
 
 export default {
-  name: "AddExpense",
+  name: "EditCategory",
   data() {
     return {
-      note: "",
-      date: "",
-      amount: "",
-      category_id: "",
-      categories: []
+      name: "",
+      id: ""
     };
   },
   created() {
-    console.log(this.$baseUrl);
-    this.fetchCategories(this.$baseUrl);
+    let data = this.$route.params.data;
+    this.name = data.name;
+    this.id = data.id;
   },
+
   methods: {
-    fetchCategories(page_url) {
-      let vm = this;
-      page_url = page_url + "categories";
-      this.$http
-        .get(page_url, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("jwt"),
-            Accept: "application/json"
-          }
-        })
-        .then(result => {
-          this.categories = result.body;
-        })
-        .catch(err => console.log(err));
-    },
     handleSubmit(e) {
-      console.log(this.category_id);
       e.preventDefault();
-      if (this.note.length > 0) {
+      if (this.name.length > 0) {
         // console.log("click");
         this.$http.headers.common["Accept"] = "application/json";
         this.$http
-          .post(
-            this.$baseUrl + "expenses",
+          .put(
+            this.$baseUrl + "categories/" + this.id,
             {
-              note: this.note,
-              amount: this.amount,
-              date: this.date,
-              category_id: this.category_id
+              name: this.name
             },
             {
               headers: {
@@ -146,7 +99,7 @@ export default {
           )
           .then(response => {
             console.log(response.body);
-            this.$router.push("expenses");
+            this.$router.push("categories");
           })
           .catch(function(error) {
             console.error(error);

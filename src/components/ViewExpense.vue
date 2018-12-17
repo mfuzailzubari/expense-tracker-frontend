@@ -18,6 +18,7 @@
                   <th class="numeric">Note</th>
                   <th class="numeric">Date</th>
                   <th class="numeric">Amount</th>
+                  <th class="numeric">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -25,6 +26,9 @@
                   <td>{{ expense.note }}</td>
                   <td>{{ expense.date }}</td>
                   <td class="numeric">{{ expense.amount }}</td>
+                  <td>
+                    <button @click="edit(expense)">edit</button>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -55,7 +59,6 @@ export default {
       },
       article_id: "",
       pagination: {},
-      edit: false
     };
   },
 
@@ -64,6 +67,13 @@ export default {
     this.fetchExpenses(this.$baseUrl);
   },
   methods: {
+    edit(expense) {
+      // open the modal using the refs
+      this.$router.push({
+        name: "EditExpense",
+        params: { data: expense }
+      });
+    },
     fetchExpenses(page_url) {
       let vm = this;
       page_url = page_url + "expenses";
@@ -78,7 +88,7 @@ export default {
         // .then(res => res.json())
         .then(result => {
           this.expenses = result.body;
-          console.log(this.expenses)
+          console.log(this.expenses);
           // vm.makePagination(res.meta, res.links);
         })
         .catch(err => console.log(err));

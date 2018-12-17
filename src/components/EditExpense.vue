@@ -16,7 +16,7 @@
               <div class="panel-heading">
                 <div class="pull-left">
                   <h5>
-                    <i class="fa fa-tasks"></i> Add Expense
+                    <i class="fa fa-tasks"></i> Edit Expense
                   </h5>
                 </div>
                 <br>
@@ -55,7 +55,6 @@
                         >
                         <br>
                         <select v-model="category_id" required class="form-control">
-                          <!-- <option v-bind:value="category.id" selected>{{ category.name }}</option> -->
                           <option
                             v-for="category in categories"
                             :value="category.id"
@@ -65,7 +64,7 @@
                         <br>
 
                         <button class="btn btn-theme btn-block" type="submit" @click="handleSubmit">
-                          <i class="fa fa-lock"></i> Add Expense
+                          <i class="fa fa-lock"></i> Edit Expense
                         </button>
                       </div>
                     </form>
@@ -92,9 +91,10 @@ import SideBar from "./SideBar";
 import Bottom from "./Bottom";
 
 export default {
-  name: "AddExpense",
+  name: "EditCategory",
   data() {
     return {
+      id: "",
       note: "",
       date: "",
       amount: "",
@@ -103,7 +103,13 @@ export default {
     };
   },
   created() {
-    console.log(this.$baseUrl);
+    let expense = this.$route.params.data;
+    this.id = expense.id;
+    this.note = expense.note;
+    this.date = expense.date;
+    this.amount = expense.amount;
+    this.category_id = expense.category_id;
+
     this.fetchCategories(this.$baseUrl);
   },
   methods: {
@@ -122,15 +128,15 @@ export default {
         })
         .catch(err => console.log(err));
     },
+
     handleSubmit(e) {
-      console.log(this.category_id);
       e.preventDefault();
       if (this.note.length > 0) {
         // console.log("click");
         this.$http.headers.common["Accept"] = "application/json";
         this.$http
-          .post(
-            this.$baseUrl + "expenses",
+          .put(
+            this.$baseUrl + "expenses/" + this.id,
             {
               note: this.note,
               amount: this.amount,
