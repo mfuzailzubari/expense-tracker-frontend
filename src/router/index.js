@@ -5,7 +5,9 @@ import Login from '@/components/Login'
 import Register from '@/components/Register'
 import Dashboard from '@/components/Dashboard'
 import ViewCategory from '@/components/ViewCategory'
+import AddCategory from '@/components/AddCategory'
 import ViewExpense from '@/components/ViewExpense'
+import AddExpense from '@/components/AddExpense'
 
 Vue.use(Router)
 
@@ -50,9 +52,25 @@ let router = new Router({
       }
     },
     {
+      path: '/add-expense',
+      name: 'AddExpense',
+      component: AddExpense,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
       path: '/categories',
       name: 'ViewCategory',
       component: ViewCategory,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/add-category',
+      name: 'AddCategory',
+      component: AddCategory,
       meta: {
         requiresAuth: true
       }
