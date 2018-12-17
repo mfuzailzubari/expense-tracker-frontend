@@ -104,7 +104,7 @@ export default {
         // console.log("click");
         this.$http.headers.common["Accept"] = "application/json";
         this.$http
-          .post("http://localhost:8000/api/register", {
+          .post(this.$baseUrl + "register", {
             name: this.name,
             last_name: this.last_name,
             username: this.username,
